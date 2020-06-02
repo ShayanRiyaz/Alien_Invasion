@@ -89,6 +89,16 @@ class AlienInvasion:
         # Update bullet position.
         self.bullets.update()
         
+
+        # Get rid of bullets that have disappeared.
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+        self._check_bullet_alien_collisions()
+        
+    def _check_bullet_alien_collisions(self):
+        """ Respond to bullet-alien collisions. """
+        # Remove any bullets and aliens that have collided
         # check for any bullts that have hit aliens.
         # If so, get rid of the bullet and the alien.
         
@@ -96,10 +106,10 @@ class AlienInvasion:
                                                 self.aliens,
                                                 True,
                                                 True)
-        # Get rid of bullets that have disappeared.
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
+        if not self.aliens:
+            # Destroy existing bullets and create new fleet.
+            self.bullets.empty()
+            self._create_fleet()
         
     def _update_screen(self):
         """ Update images on the screen, and flip to the new screen. """
